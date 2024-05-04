@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Tic Tac Toe</string>
+    <string name="quit">Quit</string>
+    <string name="pvp">PvP</string>
+    <string name="pvia">PvIA</string>
+    <string name="nom_joueur_1">Nom joueur 1:</string>
+    <string name="nom_joueur_2">Nom joueur 2:</string>
+    <string name="nom_joueur_x">Nom joueur X:</string>
+    <string name="ok">Ok</string>
+    <string name="nom_joueur_o">Nom joueur O:</string>
+    <string name="recommencer">Recommencer</string>
+</resources>
