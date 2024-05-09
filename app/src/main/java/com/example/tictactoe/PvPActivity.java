@@ -1,6 +1,7 @@
 package com.example.tictactoe;
 
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,6 +33,7 @@ public class PvPActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
         setContentView(R.layout.activity_pv_pactivity);
         textViewName1 = findViewById(R.id.textViewName1);
         textViewName2 = findViewById(R.id.textViewName2);
@@ -256,8 +258,8 @@ public class PvPActivity extends AppCompatActivity {
         list.add(d2);
         for(TextView textView : listTextView){
             if(textView.getText().length() == 0){
-                save =9;
-                break; //Pas fini
+                save = 9;
+                break; //Not done
             }
             else{
                 save = 8;
@@ -311,7 +313,7 @@ public class PvPActivity extends AppCompatActivity {
             player = Player.getInstance().players.get(1);
             playerBool = false;
         }
-        showMessage(player.getName() + " commence",0);
+        showMessage(player.getName() + " starts",0);
         btn.setText(player.getName());
         btn.setEnabled(false);
     }
@@ -395,9 +397,15 @@ public class PvPActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder myPopUp = new AlertDialog.Builder(PvPActivity.this);
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            showDialog();
+        }
+    };
+
+    private void showDialog(){
+        AlertDialog.Builder myPopUp = new AlertDialog.Builder(this);
         myPopUp.setTitle("Quit?");
         myPopUp.setMessage("Do you want to leave the game? All data will be lost.");
         myPopUp.setPositiveButton("Yes", (dialogInterface, i) -> {
@@ -410,11 +418,10 @@ public class PvPActivity extends AppCompatActivity {
             else{
                 showMessage("Tie: " + Player.getInstance().players.get(0).getNumberVictory() + " - " + Player.getInstance().players.get(1).getNumberVictory(),1);
             }
-            Intent intent = new Intent(PvPActivity.this,NameActivity.class);
+            Intent intent = new Intent(this, NameActivity.class);
             startActivity(intent);
         });
         myPopUp.setNegativeButton("No", (dialogInterface, i) -> {
-
         });
         myPopUp.show();
     }

@@ -40,9 +40,9 @@ public class Player {
         if (players.size() < 2){
             players.add(player);
         }else {
-            Log.e("PLayer","Too much player");
+            Log.e("Player","Too much player");
         }
-        Log.e("PLayerAdd", player.getName());
+        Log.e("PlayerAdd", player.getName());
     }
 
     public String getName() {

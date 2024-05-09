@@ -1,5 +1,6 @@
 package com.example.tictactoe;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -19,6 +20,7 @@ public class NameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name);
+        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
 
         editName1   =   findViewById(R.id.nomJoueur1);
         editName2   =   findViewById(R.id.nomJoueur2);
@@ -50,20 +52,20 @@ public class NameActivity extends AppCompatActivity {
         nameBtn.setOnClickListener(view -> {
             Log.e("TAG", String.valueOf(name));
             if (editName1.getText().length() == 0 && editName2.getText().length() == 0){
-                Toast.makeText(NameActivity.this,"Please give a name for players 1 and 2",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Please give a name for players 1 and 2",Toast.LENGTH_LONG).show();
             }
             else if (editName1.getText().length() == 0){
-                Toast.makeText(NameActivity.this,"Please give a name for player 1",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Please give a name for player 1",Toast.LENGTH_LONG).show();
             }
             else if (editName2.getText().length() == 0 && name){
-                Toast.makeText(NameActivity.this,"Please give a name for player 2",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Please give a name for player 2",Toast.LENGTH_LONG).show();
             }
             else{
                 name1 = editName1.getText().toString();
                 name2 = editName2.getText().toString();
                 Intent intent;
                 if (name){
-                    intent = new Intent(NameActivity.this, PvPActivity.class);
+                    intent = new Intent(this, PvPActivity.class);
                     if (Player.getInstance().players.isEmpty()){
                         Player.getInstance().playerAdd(new Player(name1,"X", 0));
                         Player.getInstance().playerAdd(new Player(name2,"O", 0));
@@ -78,11 +80,18 @@ public class NameActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    intent = new Intent(NameActivity.this, PvIAActivity.class);
+                    intent = new Intent(this, PvIAActivity.class);
                     intent.putExtra("name1",name1);
                 }
                 startActivity(intent);
             }
         });
     }
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            Intent intent = new Intent(NameActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+    };
 }

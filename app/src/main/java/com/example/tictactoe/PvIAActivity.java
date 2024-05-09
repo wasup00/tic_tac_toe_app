@@ -2,8 +2,11 @@ package com.example.tictactoe;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +40,7 @@ public class PvIAActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pv_iaactivity);
+        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
         textView11 = findViewById(R.id.textView11);
         textView12 = findViewById(R.id.textView12);
         textView13 = findViewById(R.id.textView13);
@@ -272,7 +276,7 @@ public class PvIAActivity extends AppCompatActivity {
             for(TextView textView : listTextView){
                 if(textView.getText().length() == 0){
                     save = 0;
-                    break; //Pas fini
+                    break; //Not done
                 }
                 else{
                     save = 2;
@@ -383,15 +387,13 @@ public class PvIAActivity extends AppCompatActivity {
     }
 
     private String checkWinner(String[][] board) {
-        // Check rows
+
         for (int i = 0; i < BOARD_SIZE; i++) {
+            // Check rows
             if (board[i][0].equals(board[i][1]) && board[i][1].equals(board[i][2]) && !board[i][0].equals(EMPTY)) {
                 return board[i][0];
             }
-        }
-
-        // Check columns
-        for (int i = 0; i < BOARD_SIZE; i++) {
+            // Check columns
             if (board[0][i].equals(board[1][i]) && board[1][i].equals(board[2][i]) && !board[0][i].equals(EMPTY)) {
                 return board[0][i];
             }
@@ -417,5 +419,34 @@ public class PvIAActivity extends AppCompatActivity {
         } else {
             return 0;
         }
+    }
+
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            showDialog();
+        }
+    };
+
+    private void showDialog(){
+        AlertDialog.Builder myPopUp = new AlertDialog.Builder(this);
+        myPopUp.setTitle("Quit?");
+        myPopUp.setMessage("Do you want to leave the game? All data will be lost.");
+        myPopUp.setPositiveButton("Yes", (dialogInterface, i) -> {
+            if (Player.getInstance().players.get(0).getNumberVictory() > Player.getInstance().players.get(1).getNumberVictory()){
+                showMessage("The player " + Player.getInstance().players.get(0).getName() + " won: " + Player.getInstance().players.get(0).getNumberVictory() + " - " + Player.getInstance().players.get(1).getNumberVictory(),1);
+            }
+            else if (Player.getInstance().players.get(0).getNumberVictory() < Player.getInstance().players.get(1).getNumberVictory()){
+                showMessage("The player " + Player.getInstance().players.get(1).getName() + " won: " + Player.getInstance().players.get(1).getNumberVictory() + " - " + Player.getInstance().players.get(0).getNumberVictory(),1);
+            }
+            else{
+                showMessage("Tie: " + Player.getInstance().players.get(0).getNumberVictory() + " - " + Player.getInstance().players.get(1).getNumberVictory(),1);
+            }
+            Intent intent = new Intent(this, NameActivity.class);
+            startActivity(intent);
+        });
+        myPopUp.setNegativeButton("No", (dialogInterface, i) -> {
+        });
+        myPopUp.show();
     }
 }
