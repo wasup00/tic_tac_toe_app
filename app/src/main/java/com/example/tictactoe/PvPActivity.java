@@ -21,7 +21,7 @@ import java.util.Random;
 public class PvPActivity extends AppCompatActivity {
 
 
-    TextView textViewName1, textViewName2, textView11, textView12, textView13, textView21, textView22, textView23, textView31, textView32, textView33;
+    TextView textViewName1, textViewName2;
     Button btn;
     Boolean playerBool, nightModeOn;
     ArrayList<TextView> listTextView = new ArrayList<>();
@@ -35,171 +35,86 @@ public class PvPActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
         setContentView(R.layout.activity_pv_pactivity);
+
+        // Initialize views
+        initViews();
+
+        // Set players' TextViews
+        setPlayersTextView();
+
+        // Set night mode
+        setNightMode();
+
+        // Set click listeners
+        setClickListeners();
+
+        // Set random player turn
+        random();
+    }
+
+    private void initViews(){
         textViewName1 = findViewById(R.id.textViewName1);
         textViewName2 = findViewById(R.id.textViewName2);
-        textView11 = findViewById(R.id.textView11);
-        textView12 = findViewById(R.id.textView12);
-        textView13 = findViewById(R.id.textView13);
-        textView21 = findViewById(R.id.textView21);
-        textView22 = findViewById(R.id.textView22);
-        textView23 = findViewById(R.id.textView23);
-        textView31 = findViewById(R.id.textView31);
-        textView32 = findViewById(R.id.textView32);
-        textView33 = findViewById(R.id.textView33);
         btn = findViewById(R.id.btn);
-        listTextView.add(textView11);
-        listTextView.add(textView12);
-        listTextView.add(textView13);
-        listTextView.add(textView21);
-        listTextView.add(textView22);
-        listTextView.add(textView23);
-        listTextView.add(textView31);
-        listTextView.add(textView32);
-        listTextView.add(textView33);
+        listTextView.add(findViewById(R.id.textView11));
+        listTextView.add(findViewById(R.id.textView12));
+        listTextView.add(findViewById(R.id.textView13));
+        listTextView.add(findViewById(R.id.textView21));
+        listTextView.add(findViewById(R.id.textView22));
+        listTextView.add(findViewById(R.id.textView23));
+        listTextView.add(findViewById(R.id.textView31));
+        listTextView.add(findViewById(R.id.textView32));
+        listTextView.add(findViewById(R.id.textView33));
+    }
 
+    private void setPlayersTextView() {
         Player.getInstance().players.get(0).setTextView(textViewName1);
         Player.getInstance().players.get(1).setTextView(textViewName2);
-        Player.getInstance().players.get(0).getTextView().setText(String.format("%s(%s) : %s", Player.getInstance().players.get(0).getName(), Player.getInstance().players.get(0).getCharacter(), Player.getInstance().players.get(0).getNumberVictory()));
-        Player.getInstance().players.get(1).getTextView().setText(String.format("%s(%s) : %s", Player.getInstance().players.get(1).getName(), Player.getInstance().players.get(1).getCharacter(), Player.getInstance().players.get(1).getNumberVictory()));
+        textViewName1.setText(String.format("%s(%s) : %s", Player.getInstance().players.get(0).getName(), Player.getInstance().players.get(0).getCharacter(), Player.getInstance().players.get(0).getNumberVictory()));
+        textViewName2.setText(String.format("%s(%s) : %s", Player.getInstance().players.get(1).getName(), Player.getInstance().players.get(1).getCharacter(), Player.getInstance().players.get(1).getNumberVictory()));
+    }
 
-        int nightModeFlags =
-                this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+    private void setNightMode() {
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         switch (nightModeFlags) {
             case Configuration.UI_MODE_NIGHT_YES:
-                for (TextView textView: listTextView){
-                    textView.setBackgroundResource(R.drawable.textview_border_night);
-                    textView.setTextColor(Color.WHITE);
-                }
-                textViewName1.setTextColor(Color.WHITE);
-                textViewName2.setTextColor(Color.WHITE);
-                nightModeOn = true;
+                setNightMode(true);
                 break;
-
             case Configuration.UI_MODE_NIGHT_NO:
-                for (TextView textView: listTextView){
-                    textView.setBackgroundResource(R.drawable.textview_border);
-                    textView.setTextColor(Color.BLACK);
-                }
-                textViewName1.setTextColor(Color.BLACK);
-                textViewName2.setTextColor(Color.BLACK);
-                nightModeOn = false;
+                setNightMode(false);
                 break;
         }
-        random();
+    }
 
-        textView11.setOnClickListener(view -> {
-            if(textView11.getText().length()==0){
-                textView11.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-            }
-            else{
-                played();
-            }
-        });
+    private void setNightMode(boolean isNightMode) {
+        for (TextView textView : listTextView) {
+            textView.setBackgroundResource(isNightMode ? R.drawable.textview_border_night : R.drawable.textview_border);
+            textView.setTextColor(isNightMode ? Color.WHITE : Color.BLACK);
+        }
+        textViewName1.setTextColor(isNightMode ? Color.WHITE : Color.BLACK);
+        textViewName2.setTextColor(isNightMode ? Color.WHITE : Color.BLACK);
+        nightModeOn = isNightMode;
+    }
 
-        textView12.setOnClickListener(view -> {
-            if(textView12.getText().length()==0){
-                textView12.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-            }
-            else{
-                played();
-            }
-        });
-
-        textView13.setOnClickListener(view -> {
-            if(textView13.getText().length()==0){
-                textView13.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-
-            }
-            else{
-                played();
-            }
-        });
-
-        textView21.setOnClickListener(view -> {
-            if(textView21.getText().length()==0){
-                textView21.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-
-            }
-            else{
-                played();
-            }
-        });
-
-        textView22.setOnClickListener(view -> {
-            if(textView22.getText().length()==0){
-                textView22.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-
-            }
-            else{
-                played();
-            }
-        });
-
-        textView23.setOnClickListener(view -> {
-            if(textView23.getText().length()==0){
-                textView23.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-
-            }
-            else{
-                played();
-            }
-        });
-
-        textView31.setOnClickListener(view -> {
-            if(textView31.getText().length()==0){
-                textView31.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-            }
-            else{
-                played();
-            }
-        });
-
-        textView32.setOnClickListener(view -> {
-            if(textView32.getText().length()==0){
-                textView32.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-            }
-            else{
-                played();
-            }
-        });
-
-        textView33.setOnClickListener(view -> {
-            if(textView33.getText().length()==0){
-                textView33.setText(player.getCharacter());
-                isFinal();
-                changePlayer();
-            }
-            else{
-                played();
-            }
-        });
+    private void setClickListeners() {
+        for (TextView textView : listTextView) {
+            textView.setOnClickListener(view -> {
+                if (textView.getText().length() == 0) {
+                    textView.setText(player.getCharacter());
+                    isFinal();
+                    changePlayer();
+                } else {
+                    played();
+                }
+            });
+        }
 
         btn.setOnClickListener(view -> {
             random();
-            for(TextView textView : listTextView){
+            for (TextView textView : listTextView) {
                 textView.setText("");
                 textView.setEnabled(true);
-                if (nightModeOn){
-                    textView.setTextColor(Color.WHITE);
-                }else {
-                    textView.setTextColor(Color.BLACK);
-                }
+                textView.setTextColor(nightModeOn ? Color.WHITE : Color.BLACK);
             }
         });
     }
@@ -292,108 +207,69 @@ public class PvPActivity extends AppCompatActivity {
 
     public void changePlayer(){
         if (!btn.isEnabled()) {
-            if (playerBool) {
-                player = Player.getInstance().players.get(1);
-                playerBool = false;
-            } else {
-                player = Player.getInstance().players.get(0);
-                playerBool = true;
-            }
+            player = playerBool ? Player.getInstance().players.get(1) : Player.getInstance().players.get(0);
+            playerBool = !playerBool;
             btn.setText(player.getName());
         }
     }
 
     public void random(){
         Random random = new Random();
-        if(random.nextInt(2)==0) {
-            player = Player.getInstance().players.get(0);
-            playerBool = true;
-        }
-        else{
-            player = Player.getInstance().players.get(1);
-            playerBool = false;
-        }
-        showMessage(player.getName() + " starts",0);
+        player = Player.getInstance().players.get(random.nextInt(2));
+        playerBool = random.nextBoolean();
+        showMessage(player.getName() + " starts", 0);
         btn.setText(player.getName());
         btn.setEnabled(false);
     }
 
-    public void gagne(){
+    private void gagne(){
         Log.e("Activity", String.valueOf(save));
         for (TextView textView : listTextView) {
             textView.setEnabled(false);
-            if (nightModeOn){
-                textView.setTextColor(Color.WHITE);
-            }else {
-                textView.setTextColor(Color.BLACK);
-            }
+            textView.setTextColor(nightModeOn ? Color.WHITE : Color.BLACK);
             Log.e("Activity", String.valueOf(textView.isEnabled()));
         }
         if(save < 8){
-            showMessage(player.getName() + " gagne",1);
+            showMessage(player.getName() + " gagne", 1);
             player.isWin();
             player.getTextView().setText(String.format("%s(%s) : %s", player.getName(), player.getCharacter(), player.getNumberVictory()));
-            switch (save){
-                case 0:
-                    for (int i = 0; i < 3; i++) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-                    }
-                    break;
-                case 1:
-                    for (int i = 3; i < 6; i++) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-
-                    }
-                    break;
-                case 2:
-                    for (int i = 6; i < 9; i++) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-                    }
-                    break;
-                case 3:
-                    for (int i = 0; i < 7; i+=3) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-                    }
-                    break;
-                case 4:
-                    for (int i = 1; i < 8; i+=3) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-                    }
-                    break;
-                case 5:
-                    for (int i = 2; i < 9; i+=3) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-                    }
-                    break;
-                case 6:
-                    for (int i = 0; i < 9; i+=4) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-                    }
-                    break;
-                case 7:
-                    for (int i = 2; i < 7; i+=2) {
-                        listTextView.get(i).setEnabled(true);
-                        listTextView.get(i).setTextColor(Color.BLUE);
-                    }
-                    break;
-                default:
-                    break;
-            }
+            setWinningTextViews(save);
         }
         else {
-            showMessage("Tie",1);
+            showMessage("Tie", 1);
         }
         btn.setEnabled(true);
-        btn.setText(R.string.recommencer);
+        btn.setText(R.string.restart);
         for (TextView textView : listTextView) {
             Log.e("Activity", String.valueOf(textView.isEnabled()));
+        }
+    }
+
+    private void setWinningTextViews(int save) {
+        int start, increment, end;
+        switch (save) {
+            case 0:
+                start = 0; increment = 1; end = 3; break;
+            case 1:
+                start = 3; increment = 1; end = 6; break;
+            case 2:
+                start = 6; increment = 1; end = 9; break;
+            case 3:
+                start = 0; increment = 3; end = 7; break;
+            case 4:
+                start = 1; increment = 3; end = 8; break;
+            case 5:
+                start = 2; increment = 3; end = 9; break;
+            case 6:
+                start = 0; increment = 4; end = 9; break;
+            case 7:
+                start = 2; increment = 2; end = 7; break;
+            default:
+                return;
+        }
+        for (int i = start; i < end; i += increment) {
+            listTextView.get(i).setEnabled(true);
+            listTextView.get(i).setTextColor(Color.BLUE);
         }
     }
 
@@ -418,8 +294,7 @@ public class PvPActivity extends AppCompatActivity {
             else{
                 showMessage("Tie: " + Player.getInstance().players.get(0).getNumberVictory() + " - " + Player.getInstance().players.get(1).getNumberVictory(),1);
             }
-            Intent intent = new Intent(this, NameActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, MainActivity.class));
         });
         myPopUp.setNegativeButton("No", (dialogInterface, i) -> {
         });

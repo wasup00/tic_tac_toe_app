@@ -24,7 +24,7 @@ public class NameActivity extends AppCompatActivity {
 
         editName1   =   findViewById(R.id.nomJoueur1);
         editName2   =   findViewById(R.id.nomJoueur2);
-        nameBtn =   findViewById(R.id.nameBtn);
+        nameBtn     =   findViewById(R.id.nameBtn);
 
         Bundle extras = getIntent().getExtras();
         boolean name;
